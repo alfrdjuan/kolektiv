@@ -1,6 +1,7 @@
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,7 +21,7 @@ public class main {
         LinkedList<String> givenCommand = new LinkedList<String>();
         Matcher data = Pattern.compile("(?<=[^@]*Given )[^@]*").matcher(testSteps);
         while (data.find()) {
-            givenCommand.add(yameroooo(data.group()));
+            givenCommand.add(yameroooo("new user with command $isNull and check result $isNull2"));
         }
         return givenCommand;
     }
@@ -44,7 +45,7 @@ public class main {
     }
 
     public static void main(String[] args) throws Exception {
-        String testSteps = "@Given data is hehe with $hehe command and BOOM with $boom sound!!!!!!!!!! @Given data is hehe2 @Given data is hehe3 @Given data is hehe4 @Given data is hehe5 @Given data is hehe6 @Then cyka blyat @Then isi zzz @Then null";
+        String testSteps = "@Given data is hehe with $hehe command and BOOM with $hehe2 sound!!!!!!!!!! @Given data is hehe2 @Given data is hehe3 @Given data is hehe4 @Given data is hehe5 @Given data is hehe6 @Then cyka blyat @Then isi zzz @Then null";
 
         LinkedList<String> data = getGivenCommand(testSteps);
         data.forEach(givenCommand -> {
@@ -131,13 +132,15 @@ public class main {
     public static String yameroooo(String wat) {
         String yamerosenpai = wat;
         System.out.println(wat);
-        Matcher data = Pattern.compile("\\$[a-zA-Z0-9]+\\s+").matcher(wat);
+        Matcher data = Pattern.compile("\\$[a-zA-Z\\d]+\\s*", Pattern.CASE_INSENSITIVE).matcher(wat);
         while (data.find()) {
             String dataItems = data.group();
             System.out.println(dataItems);
-            yamerosenpai = yamerosenpai.replace(dataItems, "{dataItems}" + " ");
+            yamerosenpai = yamerosenpai.replaceFirst("\\$[a-zA-Z\\d]+\\s*", "{dataItems}" + " ");
+            System.out.println("wtf? " + yamerosenpai);
         }
         System.out.println(yamerosenpai);
+        System.out.println("end");
         return yamerosenpai;
     }
 }
